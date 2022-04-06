@@ -86,7 +86,7 @@ def webhook():
         print("Data received from Webhook is: ", request.json)
 
         # parse json data to SQL insert
-        timestamp = validate_string(request.json["datetime"])
+        timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         origin = validate_string(request.json["origin"])
         arch = validate_string(request.json["arch"])
         productmodel = validate_string(request.json["productmodel"])
