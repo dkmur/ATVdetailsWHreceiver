@@ -3,7 +3,7 @@
 #
 __author__ = "GhostTalker"
 __copyright__ = "Copyright 2022, The GhostTalker project"
-__version__ = "0.2.0"
+__version__ = "0.2.1"
 __status__ = "DEV"
 
 import os
@@ -140,7 +140,8 @@ def webhook():
         cpuL10 = validate_string(request.json["cpuL10"])
         cpuLavg = validate_string(request.json["cpuLavg"])
         cpuPogoPct = validate_string(request.json["cpuPogoPct"])
-        cpuVmPct = validate_string(request.json["cpuVmPct"])        
+        cpuVmPct = validate_string(request.json["cpuVmPct"]) 
+        numPogo = validate_string(request.json["numPogo"])
 
         insert_stmt1 = "\
             INSERT INTO ATVsummary \
@@ -185,7 +186,8 @@ def webhook():
                 rawpostdest, \
                 lat, \
                 lon, \
-                overlay) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) \
+                overlay, \
+                numPogo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) \
             ON DUPLICATE KEY UPDATE \
                 timestamp = VALUES(timestamp), \
                 arch = VALUES(arch), \
@@ -227,16 +229,17 @@ def webhook():
                 rawpostdest = VALUES(rawpostdest), \
                 lat = VALUES(lat), \
                 lon = VALUES(lon), \
-                overlay = VALUES(overlay)"
+                overlay = VALUES(overlay), \
+                numPogo = VALUES(numPogo)"
 
-        data1 = (str(origin), str(timestamp), str(arch), str(productmodel), str(vm_script), str(vmapper55), str(vmapper42), str(pogo), str(vmapper), str(pogo_update), str(vm_update), str(temperature), str(magisk), str(magisk_modules), str(macw), str(mace), str(ip), str(ext_ip), str(diskSysPct), str(diskDataPct), str(bootdelay), str(gzip), str(betamode), str(selinux), str(daemon), str(authpassword), str(authuser), str(authid), str(postdest), str(fridastarted), str(patchedpid), str(openlucky), str(rebootminutes), str(deviceid), str(websocketurl), str(catchPokemon), str(catchRare), str(launcherver), str(rawpostdest), str(lat), str(lon), str(overlay) )
+        data1 = (str(origin), str(timestamp), str(arch), str(productmodel), str(vm_script), str(vmapper55), str(vmapper42), str(pogo), str(vmapper), str(pogo_update), str(vm_update), str(temperature), str(magisk), str(magisk_modules), str(macw), str(mace), str(ip), str(ext_ip), str(diskSysPct), str(diskDataPct), str(bootdelay), str(gzip), str(betamode), str(selinux), str(daemon), str(authpassword), str(authuser), str(authid), str(postdest), str(fridastarted), str(patchedpid), str(openlucky), str(rebootminutes), str(deviceid), str(websocketurl), str(catchPokemon), str(catchRare), str(launcherver), str(rawpostdest), str(lat), str(lon), str(overlay), str(numPogo) )
 
         insert_stmt2 = (
-            "INSERT INTO ATVstats (timestamp, RPL, origin, temperature, memTot, memFree, memAv, memPogo, memVM, cpuSys, cpuUser, cpuL5, cpuL10, cpuLavg, cpuPogoPct, cpuVmPct )"
-            "VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )"
+            "INSERT INTO ATVstats (timestamp, RPL, origin, temperature, memTot, memFree, memAv, memPogo, memVM, cpuSys, cpuUser, cpuL5, cpuL10, cpuLavg, cpuPogoPct, cpuVmPct, diskSysPct, diskDataPct )"
+            "VALUES ( %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s )"
         )        
         
-        data2 = (str(timestamp), str(RPL), str(origin), str(temperature), str(memTot), str(memFree), str(memAv), str(memPogo), str(memVM), str(cpuSys), str(cpuUser), str(cpuL5), str(cpuL10), str(cpuLavg), str(cpuPogoPct), str(cpuVmPct) )
+        data2 = (str(timestamp), str(RPL), str(origin), str(temperature), str(memTot), str(memFree), str(memAv), str(memPogo), str(memVM), str(cpuSys), str(cpuUser), str(cpuL5), str(cpuL10), str(cpuLavg), str(cpuPogoPct), str(cpuVmPct), str(diskSysPct), str(diskDataPct) )
 
 
         try:
