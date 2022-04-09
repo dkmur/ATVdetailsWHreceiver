@@ -3,7 +3,7 @@
 #
 __author__ = "GhostTalker"
 __copyright__ = "Copyright 2022, The GhostTalker project"
-__version__ = "0.2.1"
+__version__ = "0.2.2"
 __status__ = "DEV"
 
 import os
@@ -142,6 +142,26 @@ def webhook():
         cpuPogoPct = validate_string(request.json["cpuPogoPct"])
         cpuVmPct = validate_string(request.json["cpuVmPct"]) 
         numPogo = validate_string(request.json["numPogo"])
+        whversion = validate_string(request.json["whversion"])
+        wh_enabled = validate_string(request.json["wh_enabled"])
+        vmc_reboot = validate_string(request.json["vmc_reboot"])
+        vm_patcher_restart = validate_string(request.json["vm_patcher_restart"])
+        vm_pogo_restart = validate_string(request.json["vm_pogo_restart"])
+        vm_crash_dialog = validate_string(request.json["vm_crash_dialog"])
+        vm_injection = validate_string(request.json["vm_injection"])
+        vm_injectTimeout = validate_string(request.json["vm_injectTimeout"])
+        vm_consent = validate_string(request.json["vm_consent"])
+        vm_ws_stop_pogo = validate_string(request.json["vm_ws_stop_pogo"])
+        vm_ws_start_pogo = validate_string(request.json["vm_ws_start_pogo"])
+        vm_authStart = validate_string(request.json["vm_authStart"])
+        vm_authSuccess = validate_string(request.json["vm_authSuccess"])
+        vm_authFailed = validate_string(request.json["vm_authFailed"])
+        vm_Gtoken = validate_string(request.json["vm_Gtoken"])
+        vm_Ptoken = validate_string(request.json["vm_Ptoken"])
+        vm_PtokenMaster = validate_string(request.json["vm_PtokenMaster"])
+        vm_died = validate_string(request.json["vm_died"])
+
+
 
         insert_stmt1 = "\
             INSERT INTO ATVsummary \
@@ -187,7 +207,9 @@ def webhook():
                 lat, \
                 lon, \
                 overlay, \
-                numPogo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) \
+                whversion, \
+                wh_enabled, \
+                numPogo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) \
             ON DUPLICATE KEY UPDATE \
                 timestamp = VALUES(timestamp), \
                 arch = VALUES(arch), \
@@ -230,9 +252,11 @@ def webhook():
                 lat = VALUES(lat), \
                 lon = VALUES(lon), \
                 overlay = VALUES(overlay), \
+                whversion = VALUES(whversion), \
+                wh_enabled = VALUES(wh_enabled), \
                 numPogo = VALUES(numPogo)"
 
-        data1 = (str(origin), str(timestamp), str(arch), str(productmodel), str(vm_script), str(vmapper55), str(vmapper42), str(pogo), str(vmapper), str(pogo_update), str(vm_update), str(temperature), str(magisk), str(magisk_modules), str(macw), str(mace), str(ip), str(ext_ip), str(diskSysPct), str(diskDataPct), str(bootdelay), str(gzip), str(betamode), str(selinux), str(daemon), str(authpassword), str(authuser), str(authid), str(postdest), str(fridastarted), str(patchedpid), str(openlucky), str(rebootminutes), str(deviceid), str(websocketurl), str(catchPokemon), str(catchRare), str(launcherver), str(rawpostdest), str(lat), str(lon), str(overlay), str(numPogo) )
+        data1 = (str(origin), str(timestamp), str(arch), str(productmodel), str(vm_script), str(vmapper55), str(vmapper42), str(pogo), str(vmapper), str(pogo_update), str(vm_update), str(temperature), str(magisk), str(magisk_modules), str(macw), str(mace), str(ip), str(ext_ip), str(diskSysPct), str(diskDataPct), str(bootdelay), str(gzip), str(betamode), str(selinux), str(daemon), str(authpassword), str(authuser), str(authid), str(postdest), str(fridastarted), str(patchedpid), str(openlucky), str(rebootminutes), str(deviceid), str(websocketurl), str(catchPokemon), str(catchRare), str(launcherver), str(rawpostdest), str(lat), str(lon), str(overlay), str(whversion), str(wh_enabled), str(numPogo) )
 
         insert_stmt2 = (
             "INSERT INTO ATVstats (timestamp, RPL, origin, temperature, memTot, memFree, memAv, memPogo, memVM, cpuSys, cpuUser, cpuL5, cpuL10, cpuLavg, cpuPogoPct, cpuVmPct, diskSysPct, diskDataPct )"
@@ -240,6 +264,48 @@ def webhook():
         )        
         
         data2 = (str(timestamp), str(RPL), str(origin), str(temperature), str(memTot), str(memFree), str(memAv), str(memPogo), str(memVM), str(cpuSys), str(cpuUser), str(cpuL5), str(cpuL10), str(cpuLavg), str(cpuPogoPct), str(cpuVmPct), str(diskSysPct), str(diskDataPct) )
+
+        insert_stmt3 = "\
+            INSERT INTO ATVvmlog \
+                (timestamp, \
+                origin, \
+                vmc_reboot, \
+                vm_patcher_restart, \
+                vm_pogo_restart, \
+                vm_crash_dialog, \
+                vm_injection, \
+                vm_injectTimeout, \
+                vm_consent, \
+                vm_ws_stop_pogo, \
+                vm_ws_start_pogo, \
+                vm_authStart, \
+                vm_authSuccess, \
+                vm_authFailed, \
+                vm_Gtoken, \
+                vm_Ptoken, \
+                vm_PtokenMaster, \
+                vm_died) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s) \
+            ON DUPLICATE KEY UPDATE \
+                timestamp = VALUES(timestamp), \
+                origin = VALUES(origin), \
+                vmc_reboot = VALUES(vmc_reboot), \
+                vm_patcher_restart = VALUES(vm_patcher_restart), \
+                vm_pogo_restart = VALUES(vm_pogo_restart), \
+                vm_crash_dialog = VALUES(vm_crash_dialog), \
+                vm_injection = VALUES(vm_injection), \
+                vm_injectTimeout = VALUES(vm_injectTimeout), \
+                vm_consent = VALUES(vm_consent), \
+                vm_ws_stop_pogo = VALUES(vm_ws_stop_pogo), \
+                vm_ws_start_pogo = VALUES(vm_ws_start_pogo), \
+                vm_authStart = VALUES(vm_authStart), \
+                vm_authSuccess = VALUES(vm_authSuccess), \
+                vm_authFailed = VALUES(vm_authFailed), \
+                vm_Gtoken = VALUES(vm_Gtoken), \
+                vm_Ptoken = VALUES(vm_Ptoken), \
+                vm_PtokenMaster = VALUES(vm_PtokenMaster), \
+                vm_died = VALUES(vm_died)"
+
+        data3 = ( str(timestamp), str(origin), str(vmc_reboot), str(vm_patcher_restart), str(vm_pogo_restart), str(vm_crash_dialog), str(vm_injection), str(vm_injectTimeout), str(vm_consent), str(vm_ws_stop_pogo), str(vm_ws_start_pogo), str(vm_authStart), str(vm_authSuccess), str(vm_authFailed), str(vm_Gtoken), str(vm_Ptoken), str(vm_PtokenMaster), str(vm_died) )
 
 
         try:
@@ -252,6 +318,7 @@ def webhook():
                 cursor = connection_object.cursor()
                 cursor.execute(insert_stmt1, data1)
                 cursor.execute(insert_stmt2, data2)
+                cursor.execute(insert_stmt3, data3)
                 connection_object.commit()
                 print("Data inserted")
                 
